@@ -52,7 +52,14 @@ export function Layout() {
             color="inherit"
             edge="start"
             onClick={() => setDrawerOpen(true)}
-            sx={{ mr: 1, display: { xs: 'flex', md: 'none' } }}
+            sx={{
+              mr: 1,
+              display: { xs: 'flex', md: 'none' },
+              cursor: 'pointer',
+              position: 'relative',
+              zIndex: 1,
+              touchAction: 'manipulation',
+            }}
           >
             <MenuIcon />
           </IconButton>
