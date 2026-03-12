@@ -2,7 +2,11 @@
 <html lang="en">
   <head>
     <script>
-      (function(){var r=sessionStorage.redirect;if(r){delete sessionStorage.redirect;history.replaceState(null,'',r)}})();
+      (function(){
+        var r=sessionStorage.redirect;if(r){delete sessionStorage.redirect;history.replaceState(null,'',r)}
+        var vh=function(){var v=window.innerHeight*0.01;document.documentElement.style.setProperty('--vh',v+'px')};
+        vh();window.addEventListener('resize',vh);window.addEventListener('orientationchange',vh);
+      })();
     </script>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />

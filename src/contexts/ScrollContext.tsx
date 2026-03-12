@@ -1,4 +1,4 @@
-import { createContext, useContext, useCallback, useRef } from 'react'
+import { createContext, useContext, useCallback } from 'react'
 
 type ScrollToTopFn = () => void
 

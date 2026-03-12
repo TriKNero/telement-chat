@@ -54,7 +54,7 @@ export function Layout() {
   }, [location.pathname])
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', minHeight: 'calc(var(--vh, 1vh) * 100)' }}>
       <AppBar
         position="sticky"
         sx={{
@@ -175,15 +175,14 @@ export function Layout() {
               minWidth: 0,
               overflowY: 'auto',
               bgcolor: 'background.default',
-            pt: 'max(16px, env(safe-area-inset-top, 0px))',
-            pt: 'calc(16px + env(safe-area-inset-top, 0px))',
-            pb: 'calc(24px + env(safe-area-inset-bottom, 0px))',
+              pb: 'calc(24px + env(safe-area-inset-bottom, 0px))',
               scrollPaddingTop: 24,
               WebkitOverflowScrolling: 'touch',
               ...(isMobile ? { touchAction: 'pan-y' } : {}),
             }}
             {...(isMobile ? swipeHandlers : {})}
           >
+            <Box sx={{ minHeight: 'calc(24px + env(safe-area-inset-top, 0px))', flexShrink: 0 }} />
             <Outlet />
           </Box>
         </ScrollProvider>
