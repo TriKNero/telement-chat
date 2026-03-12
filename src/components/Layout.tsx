@@ -26,10 +26,11 @@ export function Layout() {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const isPostView = /\/posts\/\d+/.test(location.pathname)
+  const isWelcomePage = location.pathname === '/'
 
   const swipeHandlers = useSwipe(
     () => {
-      if (isMobile && isPostView) setDrawerOpen(true)
+      if (isMobile && (isPostView || isWelcomePage)) setDrawerOpen(true)
     },
     () => {
       if (isMobile) setDrawerOpen(false)

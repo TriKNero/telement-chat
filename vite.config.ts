@@ -5,10 +5,27 @@ import { resolve } from 'path'
 
 const base = process.env.VITE_BASE ?? '/telement-chat/'
 
+const baseNoSlash = base.replace(/\/$/, '')
+
 export default defineConfig({
   base,
   plugins: [
     react(),
+    {
+      name: 'redirect-base-no-slash',
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          const url = req.url ?? ''
+          if (url === baseNoSlash || url.startsWith(baseNoSlash + '?')) {
+            const search = url.includes('?') ? url.slice(baseNoSlash.length) : ''
+            res.writeHead(307, { Location: base + search })
+            res.end()
+            return
+          }
+          next()
+        })
+      },
+    },
     {
       name: 'gh-pages-404',
       closeBundle() {

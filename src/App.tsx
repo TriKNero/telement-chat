@@ -5,6 +5,7 @@ import { CircularProgress, Box } from '@mui/material'
 import { AppThemeProvider } from './contexts/ThemeContext'
 import { Layout } from './components/Layout'
 
+const WelcomePage = lazy(() => import('./pages/WelcomePage').then((m) => ({ default: m.WelcomePage })))
 const PostPage = lazy(() => import('./pages/PostPage').then((m) => ({ default: m.PostPage })))
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })))
 
@@ -24,9 +25,22 @@ function App() {
         <BrowserRouter basename={import.meta.env.BASE_URL}>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route index element={<Navigate to="/posts/1" replace />} />
+              <Route
+                index
+                element={
+                  <Suspense
+                    fallback={
+                      <Box display="flex" justifyContent="center" alignItems="center" minHeight={200}>
+                        <CircularProgress />
+                      </Box>
+                    }
+                  >
+                    <WelcomePage />
+                  </Suspense>
+                }
+              />
               <Route path="posts">
-                <Route index element={<Navigate to="/posts/1" replace />} />
+                <Route index element={<Navigate to="/" replace />} />
                 <Route
                   path=":id"
                   element={
