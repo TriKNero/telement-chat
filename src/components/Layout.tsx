@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import {
   Box,
@@ -11,6 +11,7 @@ import {
   useTheme,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
+import CloseIcon from '@mui/icons-material/Close'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import LightModeIcon from '@mui/icons-material/LightMode'
 import { useThemeMode } from '../contexts/ThemeContext'
@@ -35,8 +36,14 @@ export function Layout() {
     }
   )
 
+  const contentRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     setDrawerOpen(false)
+  }, [location.pathname])
+
+  useEffect(() => {
+    contentRef.current?.scrollTo(0, 0)
   }, [location.pathname])
 
   return (
@@ -52,7 +59,7 @@ export function Layout() {
           <IconButton
             color="inherit"
             edge="start"
-            onClick={() => setDrawerOpen(true)}
+            onClick={() => setDrawerOpen((prev) => !prev)}
             sx={{
               mr: 1,
               display: { xs: 'flex', md: 'none' },
@@ -62,7 +69,7 @@ export function Layout() {
               minHeight: 48,
             }}
           >
-            <MenuIcon />
+            {drawerOpen ? <CloseIcon /> : <MenuIcon />}
           </IconButton>
           <Typography
             variant="h6"
@@ -153,12 +160,14 @@ export function Layout() {
           </Box>
         </SwipeableDrawer>
         <Box
+          ref={contentRef}
           className="scrollbar-hide"
           sx={{
             flex: 1,
             minWidth: 0,
             overflowY: 'auto',
             bgcolor: 'background.default',
+            pb: 'calc(24px + env(safe-area-inset-bottom, 0px))',
             ...(isMobile ? { touchAction: 'pan-y' } : {}),
           }}
           {...(isMobile ? swipeHandlers : {})}
