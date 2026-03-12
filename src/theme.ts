@@ -28,5 +28,11 @@ export function createAppTheme(mode: PaletteMode) {
     typography: {
       fontFamily: '"Segoe UI", system-ui, -apple-system, sans-serif',
     },
+    transitions: {
+      duration: {
+        enteringScreen: 400,
+        leavingScreen: 350,
+      },
+    },
   })
 }

@@ -6,7 +6,7 @@ import {
   Toolbar,
   Typography,
   IconButton,
-  Drawer,
+  SwipeableDrawer,
   useMediaQuery,
   useTheme,
 } from '@mui/material'
@@ -26,9 +26,14 @@ export function Layout() {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const isPostView = /\/posts\/\d+/.test(location.pathname)
 
-  const swipeHandlers = useSwipe(() => {
-    if (isMobile && isPostView) setDrawerOpen(true)
-  })
+  const swipeHandlers = useSwipe(
+    () => {
+      if (isMobile && isPostView) setDrawerOpen(true)
+    },
+    () => {
+      if (isMobile) setDrawerOpen(false)
+    }
+  )
 
   useEffect(() => {
     setDrawerOpen(false)
@@ -75,9 +80,14 @@ export function Layout() {
         >
           <Sidebar />
         </Box>
-        <Drawer
+        <SwipeableDrawer
           open={drawerOpen}
           onClose={() => setDrawerOpen(false)}
+          onOpen={() => setDrawerOpen(true)}
+          disableSwipeToOpen={false}
+          hysteresis={0.6}
+          minFlingVelocity={600}
+          swipeAreaWidth={40}
           sx={{ display: { xs: 'block', md: 'none' } }}
           PaperProps={{
             sx: {
@@ -103,7 +113,7 @@ export function Layout() {
           >
             <Sidebar />
           </Box>
-        </Drawer>
+        </SwipeableDrawer>
         <Box
           className="scrollbar-hide"
           sx={{
@@ -112,7 +122,7 @@ export function Layout() {
             overflowY: 'auto',
             bgcolor: 'background.default',
           }}
-          {...(isMobile && isPostView ? swipeHandlers : {})}
+          {...(isMobile ? swipeHandlers : {})}
         >
           <Outlet />
         </Box>

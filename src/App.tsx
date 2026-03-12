@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { CircularProgress, Box } from '@mui/material'
 import { AppThemeProvider } from './contexts/ThemeContext'
 import { Layout } from './components/Layout'
-import { PostPage } from './pages/PostPage'
-import { NotFoundPage } from './pages/NotFoundPage'
+
+const PostPage = lazy(() => import('./pages/PostPage').then((m) => ({ default: m.PostPage })))
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })))
 
 function App() {
   const [queryClient] = useState(
@@ -25,9 +27,35 @@ function App() {
               <Route index element={<Navigate to="/posts/1" replace />} />
               <Route path="posts">
                 <Route index element={<Navigate to="/posts/1" replace />} />
-                <Route path=":id" element={<PostPage />} />
+                <Route
+                  path=":id"
+                  element={
+                    <Suspense
+                      fallback={
+                        <Box display="flex" justifyContent="center" alignItems="center" minHeight={200}>
+                          <CircularProgress />
+                        </Box>
+                      }
+                    >
+                      <PostPage />
+                    </Suspense>
+                  }
+                />
               </Route>
-              <Route path="*" element={<NotFoundPage />} />
+              <Route
+                path="*"
+                element={
+                  <Suspense
+                    fallback={
+                      <Box display="flex" justifyContent="center" alignItems="center" minHeight={200}>
+                        <CircularProgress />
+                      </Box>
+                    }
+                  >
+                    <NotFoundPage />
+                  </Suspense>
+                }
+              />
             </Route>
           </Routes>
         </BrowserRouter>

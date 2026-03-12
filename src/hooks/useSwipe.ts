@@ -1,8 +1,8 @@
 import { useCallback, useRef } from 'react'
 
-const MIN_SWIPE_DISTANCE = 50
+const MIN_SWIPE_DISTANCE = 90
 
-export function useSwipe(onSwipeRight: () => void) {
+export function useSwipe(onSwipeRight: () => void, onSwipeLeft?: () => void) {
   const touchStart = useRef<{ x: number } | null>(null)
 
   const onTouchStart = useCallback((e: React.TouchEvent) => {
@@ -16,9 +16,11 @@ export function useSwipe(onSwipeRight: () => void) {
       touchStart.current = null
       if (deltaX > MIN_SWIPE_DISTANCE) {
         onSwipeRight()
+      } else if (deltaX < -MIN_SWIPE_DISTANCE && onSwipeLeft) {
+        onSwipeLeft()
       }
     },
-    [onSwipeRight]
+    [onSwipeRight, onSwipeLeft]
   )
 
   return { onTouchStart, onTouchEnd }
