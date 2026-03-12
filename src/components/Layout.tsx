@@ -1,0 +1,122 @@
+import { useState, useEffect } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
+import {
+  Box,
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Drawer,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
+import LightModeIcon from '@mui/icons-material/LightMode'
+import { useThemeMode } from '../contexts/ThemeContext'
+import { useSwipe } from '../hooks/useSwipe'
+import { Sidebar } from './Sidebar'
+import { APP_BAR_HEIGHT, HEADER_COLOR_LIGHT, HEADER_COLOR_DARK } from '../theme'
+
+export function Layout() {
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const location = useLocation()
+  const { mode, toggleMode } = useThemeMode()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const isPostView = /\/posts\/\d+/.test(location.pathname)
+
+  const swipeHandlers = useSwipe(() => {
+    if (isMobile && isPostView) setDrawerOpen(true)
+  })
+
+  useEffect(() => {
+    setDrawerOpen(false)
+  }, [location.pathname])
+
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      <AppBar
+        position="sticky"
+        sx={{
+          bgcolor: mode === 'light' ? HEADER_COLOR_LIGHT : HEADER_COLOR_DARK,
+        }}
+      >
+        <Toolbar sx={{ minHeight: APP_BAR_HEIGHT }}>
+          <IconButton
+            color="inherit"
+            edge="start"
+            onClick={() => setDrawerOpen(true)}
+            sx={{ mr: 1, display: { xs: 'flex', md: 'none' } }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" fontWeight={600} sx={{ flexGrow: 1 }}>
+            Telement
+          </Typography>
+          <IconButton color="inherit" onClick={toggleMode} sx={{ ml: 1 }}>
+            {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <Box sx={{ display: 'flex', flex: 1, minHeight: 0 }}>
+        <Box
+          className="scrollbar-hide"
+          sx={{
+            width: 360,
+            flexShrink: 0,
+            height: `calc(100vh - ${APP_BAR_HEIGHT}px)`,
+            borderRight: 1,
+            borderColor: 'divider',
+            bgcolor: 'background.paper',
+            overflowY: 'auto',
+            display: { xs: 'none', md: 'block' },
+          }}
+        >
+          <Sidebar />
+        </Box>
+        <Drawer
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+          sx={{ display: { xs: 'block', md: 'none' } }}
+          PaperProps={{
+            sx: {
+              width: 320,
+              top: APP_BAR_HEIGHT,
+              height: `calc(100vh - ${APP_BAR_HEIGHT}px)`,
+            },
+          }}
+          ModalProps={{
+            slotProps: {
+              backdrop: {
+                sx: {
+                  top: APP_BAR_HEIGHT,
+                  height: `calc(100vh - ${APP_BAR_HEIGHT}px)`,
+                },
+              },
+            },
+          }}
+        >
+          <Box
+            className="scrollbar-hide"
+            sx={{ height: '100%', overflowY: 'auto' }}
+          >
+            <Sidebar />
+          </Box>
+        </Drawer>
+        <Box
+          className="scrollbar-hide"
+          sx={{
+            flex: 1,
+            minWidth: 0,
+            overflowY: 'auto',
+            bgcolor: 'background.default',
+          }}
+          {...(isMobile && isPostView ? swipeHandlers : {})}
+        >
+          <Outlet />
+        </Box>
+      </Box>
+    </Box>
+  )
+}
