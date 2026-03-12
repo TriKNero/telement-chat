@@ -13,34 +13,16 @@ React + TypeScript SPA that fetches posts from a public REST API, displays a lis
 
 ## Run
 
+### Terminal
+
 ```bash
 npm install
 npm run dev
 ```
 
-## Test
+Open http://localhost:5173
 
-```bash
-npm run test
-```
-
-## GitHub Pages
-
-**Option 1 — automatic (recommended):**
-
-1. Push to GitHub
-2. Settings → Pages → Source: **GitHub Actions**
-3. Push to `main` — workflow builds and deploys
-
-**Option 2 — manual:**
-
-```bash
-npm run deploy
-```
-
-Requires `base` in `vite.config.ts` to match repo name (e.g. `/telement/` for `user.github.io/telement`). For a different repo name, set `VITE_BASE=/your-repo/` before build.
-
-## Docker
+### Docker
 
 ```bash
 docker build -t telement .
@@ -48,6 +30,12 @@ docker run -p 8080:80 telement
 ```
 
 Open http://localhost:8080
+
+## Test
+
+```bash
+npm run test
+```
 
 ## Architecture
 
