@@ -41,7 +41,14 @@ export function PostDetail({
   }
 
   return (
-    <Box sx={{ p: { xs: 2, md: 3 }, maxWidth: 640, mx: 'auto' }}>
+    <Box
+      sx={{
+        p: { xs: 2, md: 3 },
+        maxWidth: 640,
+        mx: 'auto',
+        minHeight: 'calc(100vh + 20px)',
+      }}
+    >
       <Box
         sx={{
           width: '100%',
