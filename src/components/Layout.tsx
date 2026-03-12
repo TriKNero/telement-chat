@@ -43,7 +43,12 @@ export function Layout() {
   }, [location.pathname])
 
   useEffect(() => {
-    contentRef.current?.scrollTo(0, 0)
+    const el = contentRef.current
+    if (!el) return
+    const scroll = () => {
+      el.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+    }
+    requestAnimationFrame(() => requestAnimationFrame(scroll))
   }, [location.pathname])
 
   return (
@@ -167,6 +172,7 @@ export function Layout() {
             minWidth: 0,
             overflowY: 'auto',
             bgcolor: 'background.default',
+            pt: 2,
             pb: 'calc(24px + env(safe-area-inset-bottom, 0px))',
             ...(isMobile ? { touchAction: 'pan-y' } : {}),
           }}
