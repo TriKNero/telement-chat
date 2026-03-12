@@ -86,4 +86,18 @@ src/
 ### Responsive
 
 - **Desktop (≥900px)** — sidebar + detail panel
-- **Mobile (<900px)** — drawer for list, full-width detail; swipe right to open list
+- **Mobile (<900px)** — drawer for list, full-width detail
+
+### Swipe (mobile)
+
+On mobile, the list drawer can be opened and closed with swipe gestures:
+
+- **Swipe right** — opens the list drawer (when viewing a post)
+- **Swipe left** — closes the drawer
+
+Two mechanisms work together:
+
+1. **MUI SwipeableDrawer** — built-in swipe on the left edge (56px strip below the header) and on the drawer paper when open
+2. **Custom `useSwipe` hook** — horizontal swipe on the main content area (55px threshold, ignores vertical scroll)
+
+`touch-action: pan-y` on the content keeps vertical scrolling smooth and avoids conflicts with horizontal swipes.

@@ -45,6 +45,7 @@ export function Layout() {
         position="sticky"
         sx={{
           bgcolor: mode === 'light' ? HEADER_COLOR_LIGHT : HEADER_COLOR_DARK,
+          zIndex: 1400,
         }}
       >
         <Toolbar sx={{ minHeight: APP_BAR_HEIGHT }}>
@@ -56,17 +57,39 @@ export function Layout() {
               mr: 1,
               display: { xs: 'flex', md: 'none' },
               cursor: 'pointer',
-              position: 'relative',
-              zIndex: 1,
               touchAction: 'manipulation',
+              minWidth: 48,
+              minHeight: 48,
             }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" fontWeight={600} sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="h6"
+            fontWeight={600}
+            sx={{
+              flexGrow: 1,
+              py: 1.5,
+              px: 1,
+              cursor: 'pointer',
+              touchAction: 'manipulation',
+              userSelect: 'none',
+              WebkitTapHighlightColor: 'transparent',
+            }}
+          >
             Telement
           </Typography>
-          <IconButton color="inherit" onClick={toggleMode} sx={{ ml: 1 }}>
+          <IconButton
+            color="inherit"
+            onClick={toggleMode}
+            sx={{
+              ml: 1,
+              cursor: 'pointer',
+              touchAction: 'manipulation',
+              minWidth: 48,
+              minHeight: 48,
+            }}
+          >
             {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
           </IconButton>
         </Toolbar>
@@ -92,9 +115,17 @@ export function Layout() {
           onClose={() => setDrawerOpen(false)}
           onOpen={() => setDrawerOpen(true)}
           disableSwipeToOpen={false}
-          hysteresis={0.6}
-          minFlingVelocity={600}
-          swipeAreaWidth={40}
+          hysteresis={0.5}
+          minFlingVelocity={400}
+          swipeAreaWidth={56}
+          slotProps={{
+            swipeArea: {
+              sx: {
+                top: APP_BAR_HEIGHT,
+                height: `calc(100vh - ${APP_BAR_HEIGHT}px)`,
+              },
+            },
+          }}
           sx={{ display: { xs: 'block', md: 'none' } }}
           PaperProps={{
             sx: {
@@ -128,6 +159,7 @@ export function Layout() {
             minWidth: 0,
             overflowY: 'auto',
             bgcolor: 'background.default',
+            ...(isMobile ? { touchAction: 'pan-y' } : {}),
           }}
           {...(isMobile ? swipeHandlers : {})}
         >
