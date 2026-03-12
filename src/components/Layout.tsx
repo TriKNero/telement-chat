@@ -15,6 +15,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import LightModeIcon from '@mui/icons-material/LightMode'
 import { useThemeMode } from '../contexts/ThemeContext'
+import { ScrollProvider } from '../contexts/ScrollContext'
 import { useSwipe } from '../hooks/useSwipe'
 import { Sidebar } from './Sidebar'
 import { APP_BAR_HEIGHT, HEADER_COLOR_LIGHT, HEADER_COLOR_DARK } from '../theme'
@@ -165,22 +166,27 @@ export function Layout() {
             <Sidebar />
           </Box>
         </SwipeableDrawer>
-        <Box
-          ref={contentRef}
-          className="scrollbar-hide"
-          sx={{
-            flex: 1,
-            minWidth: 0,
-            overflowY: 'auto',
-            bgcolor: 'background.default',
-            pt: 2,
+        <ScrollProvider scrollRef={contentRef}>
+          <Box
+            ref={contentRef}
+            className="scrollbar-hide"
+            sx={{
+              flex: 1,
+              minWidth: 0,
+              overflowY: 'auto',
+              bgcolor: 'background.default',
+            pt: 'max(16px, env(safe-area-inset-top, 0px))',
+            pt: 'calc(16px + env(safe-area-inset-top, 0px))',
             pb: 'calc(24px + env(safe-area-inset-bottom, 0px))',
-            ...(isMobile ? { touchAction: 'pan-y' } : {}),
-          }}
-          {...(isMobile ? swipeHandlers : {})}
-        >
-          <Outlet />
-        </Box>
+              scrollPaddingTop: 24,
+              WebkitOverflowScrolling: 'touch',
+              ...(isMobile ? { touchAction: 'pan-y' } : {}),
+            }}
+            {...(isMobile ? swipeHandlers : {})}
+          >
+            <Outlet />
+          </Box>
+        </ScrollProvider>
       </Box>
     </Box>
   )
